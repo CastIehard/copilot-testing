@@ -35,3 +35,5 @@ Inspired by the excellent [GitHub Copilot HoL by @Philess](https://moaw.dev/work
 ### Julia's to do list
 - optional: before creating the spec, ask GHCP to break down the user-stories into reasonable sized github issues, and then generate the spec based on the issues; would need github access + github mcp
 - add https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering to spec-kit
+- add spec-kit for app mod section
+- save the world

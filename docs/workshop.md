@@ -23,12 +23,11 @@ Welcome! This workshop has two parts:
 
 1. **Getting Started with GitHub Copilot**: a single broad chapter for anyone who has never (or barely) used GitHub Copilot. It covers inline completions, Chat, Agent mode, the Copilot CLI, custom instructions, prompt files, tools and MCP servers.
 2. **Spec-Driven Development (SDD)**: the main part. You will learn how to make specifications, drive what GitHub Copilot builds for you, and you will do it end-to-end on a small TypeScript/Node feature.
-
-The third (optional) chapter introduces [Spec Kit](https://github.com/github/spec-kit) as a tool to use spec driven development conveniently with most agentic coding tools.
+3. **Introduction of [spec-kit](https://github.com/github/spec-kit)** as a tool to use spec driven development conveniently with most agentic coding tools.
 
 <div class="info" data-title="Who is this for?">
 
-> Developers, tech leads and architects who want bring their GitHub Copilot usage under control also for more complex scenarios. No prior Copilot experience is required, but recommended. Chapter 1 is designed to help you catch up fast.
+> Developers, tech leads and architects who want bring their agentic AI and GitHub Copilot skills to the next level to make it also suitable for more complex scenarios. No prior Copilot experience is required, but recommended. Chapter 1 is designed to help you catch up fast.
 
 </div>
 
@@ -146,7 +145,12 @@ gh extension install github/gh-copilot
 
 **Try it.** Open a terminal, navigate to any folder or repo, run `copilot --banner` and ask "what is this repository about?"
 
-Especially when you run command line tools, always review the execution before accepting it. **Never blindly execute** suggested shell commands (in general).
+<div class="warning" data-title="Command line tool execution">
+
+> Especially when you run command line tools, always review the execution before accepting it. **Never blindly execute** suggested shell commands (in general).
+
+</div>
+
 
 ## 1.3 copilot-instructions & AGENTS.md
 
@@ -158,48 +162,77 @@ What should be considered for all instructions or `AGENTS.md` is
 
 This repo ships with one [`.github/copilot-instructions.md`](https://github.com/jkordick/ghcp-advanced/blob/main/.github/copilot-instructions.md). Feel free to open and read it. Notice it is short, declarative and project-scoped.
 
---- read until here
-
 ## 1.4 Prompt files
 
 Prompt files (`*.prompt.md`) are **reusable prompts** stored in your repo. They show up in Chat as runnable commands.
 
-Create `.github/prompts/new-feature.prompt.md`:
+Create `.github/prompts/add-test.prompt.md`:
+
+<div class="tip" data-title="Tip">
+
+> You can either create it manually or `CTRL/CMD + Shift + P` -> New Prompt File...
+
+</div>
 
 ```markdown
 ---
 mode: agent
-description: Scaffold a new feature using our spec-driven workflow
+description: Add unit tests
 ---
-You are helping me add a new feature.
-
-1. Ask me clarifying questions until you have an unambiguous spec.
-2. Write the spec to `specs/<feature>/spec.md`.
-3. Propose a task list in `specs/<feature>/tasks.md`.
-4. Wait for my approval before writing code.
+Look at the source I provide. Write unit tests that cover the main exported functions. Place tests next to the source as `<filename>.test.ts` and run them with `vitest`.
 ```
 
-Run it from Chat with `/new-feature`. Prompt files are the *primitive* you will build SDD on top of in Chapter 2.
+Run it from Chat with `/add-test`. Prompt files are the *primitive* you will build SDD on top of in Chapter 2.
 
-## 1.5 Chatmodes
+## 1.5 Custom agents
 
-Chatmodes (`*.chatmode.md`) define a **persona + toolset + system prompt** that you switch into from the mode picker. Example: a `Spec Author` chatmode that disables code edits and forces the model to only ask questions and write markdown specs.
+Custom agents (`*.agent.md`) let you create specialized Copilot personas with tailored expertise, tool access and instructions. Store them in `.github/agents/` (repo-level) or `.github/` for org-wide agents. They are available in VS Code, on github.com and in the Copilot CLI.
+
+Create `.github/agents/test-specialist.agent.md`:
+
+<div class="tip" data-title="Tip">
+
+> Same trick available like above. With `CTRL/CMD + Shift + P`-> Create new agent...
+
+</div>
 
 ```markdown
 ---
-description: Spec Author — only asks questions and writes specs, never edits code.
-tools: ['codebase', 'search']
+name: test-specialist
+description: Focuses on test coverage and quality without modifying production code
+tools: ["read", "search", "edit"]
 ---
-You are a senior product engineer acting as a spec author. Never write production
-code. Your only outputs are clarifying questions and markdown files under `specs/`.
-Stop after producing a spec and wait for explicit approval.
+You are a testing specialist focused on improving code quality through comprehensive testing. Analyze existing tests, identify coverage gaps, and write unit, integration, and end-to-end tests. Focus only on test
+files — avoid modifying production code unless specifically requested.
 ```
 
-Save it as `.github/chatmodes/spec-author.chatmode.md` and pick it from the mode dropdown.
+Pick the agent from the mode dropdown in VS Code Chat, or use it in the Copilot CLI with the `/agent` command. See [Creating custom agents](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents) for full configuration options.
 
-## 1.6 MCP servers
+## 1.6 Agent skills
 
-The [Model Context Protocol](https://modelcontextprotocol.io) lets Copilot connect to external tools — issue trackers, databases, browsers, your own services. Configure servers per workspace in `.vscode/mcp.json`:
+If you know what you want to do (e.g. converting a svg to a png) you can just tell the agent "how to do it" with the help of a skill.
+
+Skills live in `.github/skills/` (project) or `~/.copilot/skills/` (personal). Create one with `Cmd/Ctrl+Shift+P` → *Generate Skill…* or type `/create-skill` in Chat.
+
+This repo ships with three example skills in [`.github/skills/`](https://github.com/jkordick/ghcp-advanced/tree/main/.github/skills):
+
+| Skill | What it does |
+| --- | --- |
+| `run-tests` | Runs `npm test`, reads failures, fixes the code (not the test), re-runs until green. |
+| `lint-and-typecheck` | Runs `tsc --noEmit` then `eslint`, fixes issues in the right order. |
+| `convert-svg-to-png` | Wraps a shell script that converts SVG → PNG using whichever tool is available. Shows how a skill can include **scripts** alongside instructions. |
+
+Open [`.github/skills/run-tests/SKILL.md`](https://github.com/jkordick/ghcp-advanced/tree/main/.github/skills/run-tests/SKILL.md) to see a minimal example.
+
+Copilot auto-loads a matching skill when it detects a relevant task, or you invoke it explicitly with `/run-tests`. Skills are an [open standard](https://agentskills.io/) — they work across VS Code, the Copilot CLI and any other agentic AI.
+
+## 1.7 MCP servers
+
+The [Model Context Protocol](https://modelcontextprotocol.io) lets GitHub Copilot connect to external tools — issue trackers, databases, browsers, your own services and knowledge bases. 
+
+In VS Code open the `Extensions` tab and type `@mcp` to see all available MCP servers. 
+
+Configure custom MCP servers per workspace in `.vscode/mcp.json`:
 
 ```json
 {
@@ -212,30 +245,38 @@ The [Model Context Protocol](https://modelcontextprotocol.io) lets Copilot conne
 }
 ```
 
-Once connected, Agent mode can call those tools by name. For SDD, an MCP server pointing at your issue tracker is gold: Copilot can read the original ticket, write the spec, and link the PR back.
+In the GitHub Copilot CLI type `/mcp`.
 
-<div class="info" data-title="Enterprise"> 
+Once connected, Agent mode can call those tools by name. 
 
-> MCP servers may be governed by allow-lists. Check with your platform team before adding new ones.
+<div class="info" data-title="Enterprise organization check"> 
+
+> MCP servers may be governed by allow-lists. Check with your platform engineering team before trying to add new ones.
 
 </div>
 
-## 1.7 Quick mental model
+<div class="tip" data-title="Tip">
+
+> For SDD, an MCP server pointing at your issue tracker is gold: Copilot can read the original ticket, write the spec, and link the PR back.
+
+</div>
+
+## 1.8 Quick mental model
 
 | Surface              | Use for                                          |
 | -------------------- | ------------------------------------------------ |
 | Inline completion    | Local, line-level help                           |
 | Inline chat          | Targeted edits to a selection                    |
 | Chat (Ask)           | Questions, explanations                          |
-| Chat (Edit)          | Controlled multi-file edits                      |
 | Chat (Agent)         | Autonomous tasks — the SDD workhorse             |
 | Copilot CLI          | Same power, in the terminal / CI                 |
-| Instructions         | Durable, project-wide rules                      |
+| copilot-instructions.md<br>/AGENTS.md        | Durable, project-wide rules                      |
 | Prompt files         | Reusable, parameterizable workflows              |
-| Chatmodes            | Personas + tool scoping for a class of tasks     |
+| Custom agents        | Specialized personas + tool scoping              |
+| Agent skills         | Packaged multi-step capabilities, loaded on demand |
 | MCP servers          | Real-world tools and data the agent can use      |
 
-You now have the full toolbox. The rest of the workshop is about **using it well**.
+You now have the full toolbox. The rest of the workshop is about **using it**.
 
 ---
 
@@ -443,3 +484,15 @@ You (hopefully) have learned:
 </div>
 
 Happy spec-driving! 🚀
+
+---
+
+## Cheat sheet — when to use what
+
+| Tech | Use when… | Concrete example |
+| --- | --- | --- |
+| copilot-instructions.md / AGENTS.md | You want **every agent interaction** in this repo to follow the **same rules**. Think: architecture, naming, style, forbidden patterns. | "This repo uses hexagonal architecture. Never put business logic in controllers. All prices in EUR cents." |
+| Agent Skills | You **know** that your agent needs to do something **defined** beyond reading and writing code: run tests, call an API, query a database, fetch context from an external system. | Give the review agent a skill to run `npm test` and include results in its assessment. |
+| Custom Agents | You have a recurring task that needs a specific persona, toolset, or workflow. **How to solve the task is deliberately open.** | A `@code-reviewer` agent that checks every change against your security checklist and domain rules. The kind of changes are the **undefined variable** in this scenario. |
+| spec-kit / spec driven development | You want the **one agent** to implement a feature from a structured definition. Requirements, acceptance criteria, constraints up front. **For more complex scenarios.** | A spec for "loyalty points": earn 1 point per EUR, redeem at 100 points = 5 EUR discount. Spec defines the domain model, API contract, and edge cases before the agent writes a line of code. |
+| Squad | A task spans multiple concerns (API, database, tests, docs) and you want coordinated work across **multiple agents**. **For even more complex scenarios.** | Implementing the loyalty feature end to end: one agent handles the domain logic, another the migration, another the test suite. |
