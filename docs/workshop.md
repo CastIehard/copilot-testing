@@ -24,6 +24,7 @@ Welcome! This workshop has two parts:
 1. **Getting Started with GitHub Copilot**: a single broad chapter for anyone who has never (or barely) used GitHub Copilot. It covers inline completions, Chat, Agent mode, the Copilot CLI, custom instructions, prompt files, tools and MCP servers.
 2. **Spec-Driven Development (SDD)**: the main part. You will learn how to make specifications, drive what GitHub Copilot builds for you, and you will do it end-to-end on a small TypeScript/Node feature.
 3. **Introduction of [spec-kit](https://github.com/github/spec-kit)** as a tool to use spec driven development conveniently with most agentic coding tools.
+4. (soon) **How to use [squad](https://github.com/bradygaster/squad)** open-source framework for orchestrating multi-agent development teams.
 
 <div class="info" data-title="Who is this for?">
 
@@ -346,7 +347,6 @@ Create `.github/prompts/sdd-spec.prompt.md`:
 
 ```markdown
 ---
-mode: agent
 description: Turn a user story into a reviewable spec.
 ---
 Goal: produce `duck-emporium/specs/{story-id}/spec.md` from `user-stories/{story-id}.md`.

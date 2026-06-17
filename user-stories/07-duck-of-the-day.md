@@ -24,9 +24,3 @@
 - Per-user personalization.
 - Push notifications, email blasts.
 - Manual override by the curator (could be a future story).
-
-## Open questions
-
-- How is "day" defined — server local time, UTC, or the customer's time zone?
-- What's the selection rule? Hash of date → index? Round-robin? Random with date as seed?
-- Should newly added ducks (story 6) be eligible immediately, or only from the next day?

@@ -23,8 +23,3 @@
 - Images (text-only is fine for the workshop).
 - Sorting controls — covered later in story 5.
 
-## Open questions to resolve during `/sdd-spec`
-
-- Web UI or JSON API? (Both are valid; pick one and stick with it for all stories.)
-- What's the canonical shape of a `Duck`? (Define it now — every later story depends on it.)
-- How does the seed data get loaded? On every start? Only if the store is empty?

@@ -24,9 +24,3 @@
 - Fuzzy / typo-tolerant search.
 - Saved searches.
 - Sort order beyond a stable default.
-
-## Open questions
-
-- Do filters live in the URL (query params) so they are shareable, or only in session state?
-- If the UI does live filtering, is it client-side over the full catalog, or a round-trip per change?
-- Behavior when the user gives nonsensical input (e.g., `min_price > max_price`): error, swap, or ignore one?

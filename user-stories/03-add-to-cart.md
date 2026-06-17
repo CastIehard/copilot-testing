@@ -24,9 +24,3 @@
 - User accounts or logins.
 - Discounts, coupons, gift wrapping. (Tempting, but no.)
 - Cross-session persistence.
-
-## Open questions
-
-- What identifies a "session"? A cookie? A header? A URL token? (Pick the simplest thing that works.)
-- Should the cart store a snapshot of the price at add-time, or always re-read the current price?
-- If a duck goes out of stock *while it's already in someone's cart*, what should happen at next view?

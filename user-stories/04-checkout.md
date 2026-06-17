@@ -28,9 +28,3 @@
 - Real payment provider integration. **Do not** add Stripe/PayPal/etc.
 - Emails / notifications.
 - Order history / order lookup by customer (this can come later).
-
-## Open questions
-
-- How do we represent "atomic stock decrement" with the chosen storage? (Trivial with SQLite, more work with JSON files.)
-- What does "valid email" mean for this exercise? A regex? A library? Just contains `@`?
-- Should the order ID be human-friendly (`DUCK-000123`) or a UUID?

@@ -25,9 +25,3 @@
 - Social-media share previews.
 - Personalized discount codes.
 
-## Open questions
-
-- Is the quiz fully server-rendered, fully client-side, or a hybrid?
-- How are questions and scoring weights configured — hardcoded, JSON file, or per-environment?
-- If a category has no in-stock ducks, do we recommend a sold-out one anyway, fall back to another category, or show a "no matching duck" message?
-- How funny is too funny? (Trick question: there is no such thing.)

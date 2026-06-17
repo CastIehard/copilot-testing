@@ -23,9 +23,3 @@
 - A full admin UI. A documented `curl`/REST endpoint is sufficient.
 - Editing or deleting existing ducks.
 - Per-user admin accounts. One shared password is fine for this workshop.
-
-## Open questions
-
-- Where exactly does the password live and how is it read? (`process.env.ADMIN_PASSWORD`, dotenv, both?)
-- What status code for validation errors — 400 with a body, 422, or both?
-- Should the new duck's ID be assigned by the server, or supplied by the curator?

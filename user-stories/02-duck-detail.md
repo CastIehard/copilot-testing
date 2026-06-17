@@ -22,8 +22,3 @@
 - Customer reviews.
 - "Related ducks" suggestions.
 
-## Open questions
-
-- What exactly are "personality traits"? Tags (`["judgmental", "philosophical"]`)? Free text? A small enum?
-- How is stock level represented internally vs. shown to the customer?
-- Should sold-out ducks still be visible on the detail page (with a "Sold out" banner) or hidden entirely?

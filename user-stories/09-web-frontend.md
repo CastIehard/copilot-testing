@@ -38,8 +38,3 @@
 - Use `fetch()` against the existing API. The frontend is served from the same origin, so no CORS issues.
 - This story depends on all API stories (1–8) being complete — the frontend is a skin over the existing endpoints.
 
-## Open questions to resolve during `/sdd-spec`
-
-- Should the frontend be a single HTML file or split into `index.html` + `style.css` + `app.js`?
-- Where should static files live? (`duck-emporium/public/` served via Hono's `serveStatic`?)
-- Should the quiz be a multi-step wizard or a single scrollable form?
