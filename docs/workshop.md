@@ -107,6 +107,8 @@ The Chat side panel in "Ask" mode is for conversation about your code. Use `#` t
 #file:src/auth.ts /explain why does login() throw on empty passwords?
 ```
 
+> **In the Copilot CLI:** attach files with `@` (not `#`) and just ask in plain language — there is no `/explain` or `/fix`. Slash commands in the CLI are for the session itself (`/agent`, `/mcp`, `/context`, `/compact`, `/usage`, `/resume`, `/cwd`, `/add-dir`). Prefix a line with `!` to run a raw shell command without invoking the model.
+
 ### Agent mode
 
 In the Chat view, switch the mode picker from **Ask** to **Agent**. Agent mode can read, create and edit files across your workspace, run commands (with your approval) and iterate until a task is done. This is the surface you will lean on most in Chapter 2.
@@ -117,6 +119,8 @@ In the Chat view, switch the mode picker from **Ask** to **Agent**. Agent mode c
 > - **Agent** — autonomous task execution, coding, execution
 
 </div>
+
+> **In the Copilot CLI:** there is no Ask/Agent toggle — the CLI is always agentic. Cycle into *plan mode* with `Shift+Tab` to design before changes are made, and use `--allow-all` (or `--yolo`) for unattended runs where you accept the risk of skipping approval prompts.
 
 ## 1.2 GitHub Copilot CLI
 ![GitHub Copilot CLI](assets/cli.png)
@@ -143,6 +147,8 @@ Two things to keep in mind for both `copilot-instructions.md` and `AGENTS.md`:
 
 This repo ships with one [`.github/copilot-instructions.md`](https://github.com/jkordick/ghcp-advanced/blob/main/.github/copilot-instructions.md). Feel free to open and read it. Notice it is short, declarative and project-scoped.
 
+> **In the Copilot CLI:** the same files are picked up automatically — `.github/copilot-instructions.md`, `.github/instructions/**/*.instructions.md` and `AGENTS.md` — when you launch `copilot` inside the repo. No additional configuration needed.
+
 ## 1.4 Prompt files
 
 Prompt files (`*.prompt.md`) are **reusable prompts** stored in your repo. They show up in Chat as runnable commands.
@@ -164,6 +170,8 @@ Look at the source I provide. Write unit tests that cover the main exported func
 ```
 
 Run it from Chat with `/add-test`. Prompt files are the *primitive* you will build SDD on top of in Chapter 2.
+
+> **In the Copilot CLI:** `.prompt.md` files are a VS Code Chat feature and are not exposed as slash commands in the CLI. For reusable workflows in the CLI, reach for custom agents (1.5) or skills (1.6) instead — or just paste the prompt body into your session.
 
 ## 1.5 Custom agents
 
@@ -189,6 +197,8 @@ files — avoid modifying production code unless specifically requested.
 
 Pick the agent from the mode dropdown in VS Code Chat, or use it in the Copilot CLI with the `/agent` command. See [Creating custom agents](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents) for full configuration options.
 
+> **In the Copilot CLI:** same files (`.github/agents/` for the repo, `~/.copilot/agents/` for personal). Pick one interactively with `/agent`, mention it in a prompt (*"use the test-specialist agent to…"*), or launch it directly: `copilot --agent=test-specialist --prompt "…"`. The CLI also ships built-in agents (Explore, Task, General purpose, Code review, Research, Rubber duck).
+
 ## 1.6 Agent skills
 
 If you know what you want to do (e.g. converting a svg to a png) you can just tell the agent "how to do it" with the help of a skill.
@@ -206,6 +216,8 @@ This repo ships with three example skills in [`.github/skills/`](https://github.
 Open [`.github/skills/run-tests/SKILL.md`](https://github.com/jkordick/ghcp-advanced/tree/main/.github/skills/run-tests/SKILL.md) to see a minimal example.
 
 Copilot auto-loads a matching skill when it detects a relevant task, or you invoke it explicitly with `/run-tests`. Skills are an [open standard](https://agentskills.io/) — they work across VS Code, the Copilot CLI and any other agentic AI.
+
+> **In the Copilot CLI:** the same `.github/skills/` and `~/.copilot/skills/` locations are honored — no per-tool config required.
 
 ## 1.7 MCP servers
 
@@ -226,7 +238,7 @@ Configure custom MCP servers per workspace in `.vscode/mcp.json`, e.g.:
 }
 ```
 
-In the GitHub Copilot CLI type `/mcp`.
+> **In the Copilot CLI:** the GitHub MCP server is preconfigured. Add more with `/mcp add` (interactive form, save with `Ctrl+S`). The CLI does not read `.vscode/mcp.json` — server definitions live in `~/.copilot/mcp-config.json` (or wherever `COPILOT_HOME` points).
 
 Once connected, Agent mode can call those tools by name. 
 
@@ -519,6 +531,16 @@ A dedicated chapter on [squad](https://github.com/bradygaster/squad): an open-so
 # Chapter 5 (coming soon) - SDD for app modernization
 
 ---
+
+# Chapter 6 (coming soon) - Context Engineering
+
+---
+
+# Chapter 7 (coming soon) - Agentic Workflows
+
+--
+
+# Chapter 8 (coming soon) - GitHub Copilot SDK
 
 # Wrap-up
 
