@@ -572,8 +572,6 @@ Every loop iteration grows the context. The LLM is stateless: so the harness res
 
 ### Context rot
 
-> Read more about context rot: https://www.producttalk.org/context-rot/
-
 As the context window fills up, two effects kick in:
 
 ![Lost in the midlle](assets/cr-st50.webp)
@@ -605,8 +603,8 @@ cd duck-emporium
 ```
 
 ## 6.2.1 System prompt & tools
-**Loaded when:** every call (automatic)
-**Context cost:** fixed overhead
+**Loaded when:** every call (automatic);  
+**Context cost:** fixed overhead;  
 **Use for:** you do not control this directly, used implicitly
 
 The base prompt and tool definitions injected by the harness before your conversation even starts.
@@ -614,9 +612,9 @@ The base prompt and tool definitions injected by the harness before your convers
 You cannot edit it, but you can inspect it. [Enable debug mode in VS Code to see logs.](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/troubleshoot-copilot/view-logs)
 
 ## 6.2.2 `copilot-instructions.md` / `AGENTS.md`
-**Loaded when:** every call (always-on)
-**Context cost:** proportional to file size
-**Use for:** non-negotiable project rules that apply _every_ interaction
+**Loaded when:** every call (always-on);  
+**Context cost:** proportional to file size;  
+**Use for:** non-negotiable project rules that apply _every_ interaction. 
 
 Persistent project-level instructions. `.github/copilot-instructions.md` (one per repo, at that exact path) and `AGENTS.md` (one or more, merged root-downward) are injected into every call from the agent to the LLM automatically.
 
@@ -627,16 +625,16 @@ Persistent project-level instructions. `.github/copilot-instructions.md` (one pe
 - Do not use AI to generate instructions without reviewing them carefully, it creates bloat and the results may be even worse than without and instructions at all. [For more details read this paper.](https://arxiv.org/pdf/2602.11988)
 - Keep it short and revisit regularly. As your project evolves, some instructions may become obsolete or need adjustments.
 
-### Exercise 1: Create `copilot-instructions.md` for the duck-emporium project
+#### Exercise 1: Create `copilot-instructions.md` for the duck-emporium project
 
 Open the GitHub Copilot chat window and type `/create-instructions`. (Or in the GitHub Copilot CLI just type: `Create me a copilot-instructions.md file for this project.`). When the agent is done, review the generated instructions. Verify its quality with the help of the rules of thumb above. 
 
 If you want to have an exmaple how a decent `copilot-instructions.md` could look like: in the project root of this repo you can find a file for the whole workshop repository.
 
 ## 6.2.3 Scoped instructions (`.instructions.md`)
-**Loaded when:** agent touches files matching the `applyTo` glob
-**Context cost:** on-demand (zero cost when not triggered)
-**Use for:** file-type-specific rules that would bloat always-on instructions (e.g. `documentation.instructions.md`)
+**Loaded when:** agent touches files matching the `applyTo` glob;  
+**Context cost:** on-demand (zero cost when not triggered);  
+**Use for:** file-type-specific rules that would bloat always-on instructions (e.g. `documentation.instructions.md`). 
 
 Files in `.github/instructions/*.instructions.md` with a frontmatter `applyTo` glob. They inject into context *only* when the agent reads or writes a matching file.
 
@@ -650,7 +648,7 @@ As `AGENTS.md` work a little different, you can create an `AGENTS.md` file in ea
 
 </div>
 
-### Exercise 2: Create `testing.instructions.md` for the duck-emporium project
+#### Exercise 2: Create `testing.instructions.md` for the duck-emporium project
 
 Create `duck-emporium/.github/instructions/testing.instructions.md`:
 
@@ -671,15 +669,15 @@ applyTo: "**/tests/**"
 Ask GitHub Copilot: *"add edge-case tests for the quiz endpoint"*. The scoped instructions should load automatically for `**/tests/**` files.
 
 ## 6.2.4 Custom agents (`.agent.md`)
-**Loaded when:** explicitly invoked
-**Context cost:** replaces default agent behavior for that session
-**Use for:** specialized workflows with restricted tools or persona
+**Loaded when:** explicitly invoked;  
+**Context cost:** replaces default agent behavior for that session;  
+**Use for:** specialized workflows with restricted tools or persona. 
 
 Files in `.github/agents/*.agent.md` that define a named persona with its own system instructions and tool access. Invoked via the agent picker in VS Code or `/agent` in the CLI.
 
 Create when a recurring task needs a specific persona or tool restriction. For example a "Reverse engineer" agent that can read code and create documentation of business rules, but is not allowed to edit code or run tests. 
 
-## Exercise 3: Create a "Test specialist" agent for the duck-emporium project
+#### Exercise 3: Create a "Test specialist" agent for the duck-emporium project
 
 Create `duck-emporium/.github/agents/test-specialist.agent.md`:
 
@@ -694,15 +692,15 @@ files — avoid modifying production code unless specifically requested.
 ```
 
 ## 6.2.5 Skills/`SKILL.md`
-**Loaded when:** agentic harness detects a matching defined task (description always loaded, full doc on match); e.g. a svg to png conversion skill
-**Context cost:** on-demand (only short description in always-on budget)
-**Use for:** packaged multi-step capabilities the agent can invoke autonomously
+**Loaded when:** agentic harness detects a matching defined task (description always loaded, full doc on match); e.g. a svg to png conversion skill;  
+**Context cost:** on-demand (only short description in always-on budget);  
+**Use for:** packaged multi-step capabilities the agent can invoke autonomously 
 
 A `SKILL.md` file in `.github/skills/<name>/` that describes a repeatable procedure. The harness reads all skill descriptions upfront (cheap) and loads the full document only when it matches the current task.
 
 Wrap any multi-step workflow (run tests → read failures → fix → rerun) into a skill. The agent activates it automatically or you invoke it with `/<skill-name>`.
 
-### Exercise 4: Create a "Run and fix tests" skill for the duck-emporium project
+#### Exercise 4: Create a "Run and fix tests" skill for the duck-emporium project
 
 Create `duck-emporium/.github/skills/run-and-fix-tests/SKILL.md`:
 
